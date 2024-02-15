@@ -1,0 +1,16 @@
+[
+    {"id": 1, "nombre": "Laptop", "descripcion": "Potente computadora portátil", "imagen": "", "precio": 1999.99, "favorito": "true","categoria":{"nombre":"Informatica"}},
+    {"id": 2, "nombre": "Camiseta", "descripcion": "Camiseta de algodón de alta calidad", "imagen": "", "precio": 19.99, "favorito": "false","categoria":{"nombre":"Moda"}},
+    {"id": 3, "nombre": "Libro", "descripcion": "Bestseller del año", "imagen": "", "precio": 29.99, "favorito": "true","categoria":{"nombre":"Libros"}},
+    {"id": 4, "nombre": "Sartén", "descripcion": "Sartén antiadherente", "imagen": "", "precio": 39.99, "favorito": "false","categoria":{"nombre":"HogarYCocina"}},
+    {"id": 5, "nombre": "Zapatos", "descripcion": "Zapatos elegantes", "imagen": "", "precio": 69.99, "favorito": "true","categoria":{"nombre":"Moda"}},
+    {"id": 6, "nombre": "Teclado", "descripcion": "Teclado mecánico para gamers", "imagen": "", "precio": 89.99, "favorito": "true","categoria":{"nombre":"Informatica"}},
+    {"id": 7, "nombre": "Taza", "descripcion": "Taza con diseño divertido", "imagen": "", "precio": 9.99, "favorito": "false","categoria":{"nombre":"HogarYCocina"}},
+    {"id": 8, "nombre": "Mochila", "descripcion": "Mochila resistente al agua", "imagen": "", "precio": 49.99, "favorito": "true","categoria":{"nombre":"Moda"}},
+    {"id": 9, "nombre": "Monitor", "descripcion": "Monitor de alta resolución", "imagen": "", "precio": 299.99, "favorito": "true","categoria":{"nombre":"Informatica"}},
+    {"id": 10, "nombre": "Cocina eléctrica", "descripcion": "Cocina eléctrica multifunción", "imagen": "", "precio": 129.99, "favorito": "false","categoria":{"nombre":"HogarYCocina"}},
+    {"id": 11, "nombre": "Reloj", "descripcion": "Reloj de pulsera elegante", "imagen": "", "precio": 149.99, "favorito": "true","categoria":{"nombre":"Moda"}},
+    {"id": 12, "nombre": "Altavoces", "descripcion": "Altavoces Bluetooth de alta calidad", "imagen": "", "precio": 79.99, "favorito": "true","categoria":{"nombre":"Informatica"}},
+    {"id": 13, "nombre": "Cojines", "descripcion": "Cojines decorativos para el hogar", "imagen": "", "precio": 14.99, "favorito": "false","categoria":{"nombre":"HogarYCocina"}},
+    {"id": 14, "nombre": "Gafas de sol", "descripcion": "Gafas de sol modernas", "imagen": "", "precio": 59.99, "favorito": "true","categoria":{"nombre":"Moda"}}
+]
