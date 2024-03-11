@@ -28,7 +28,7 @@
             </Grid>
 
             <!-- Botón de Búsqueda -->
-            <Button x:Name="searchButton" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Orange" Width="34" Height="30" Margin="796,0,0,6">
+            <Button x:Name="searchButton" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Orange" Width="34" Height="30" Margin="796,0,0,6" Click="searchButton_Click">
                 <TextBlock Text="🔍" FontSize="20" Foreground="White"/>
             </Button>
 
@@ -62,7 +62,8 @@
                 <TextBlock Text="Hogar y cocina" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
                 <TextBlock Text="Libros" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
                 <TextBlock Text="Moda" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
-                <TextBlock Text="Favoritos" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
+                <TextBlock Text="Favoritos" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="Favoritos_MouseLeftButtonDown"/>
+                <TextBlock Text="Recomendados" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
             </StackPanel>
         </Grid>
 

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,23 +36,32 @@ namespace AmazonChiquito
         // Función de ejemplo para obtener productos (simulada)
         private List<Producto> ObtenerProductosDesdeAPI()
         {
-            return new List<Producto>
+            List<Producto> listaProductos = new List<Producto>();
+
+            using (HttpClient client = new HttpClient())
             {
-                new Producto(1, "Laptop", "Potente computadora portátil", 1999.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(2, "Camiseta", "Camiseta de algodón de alta calidad", 19.99f, false, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(3, "Libro", "Bestseller del año", 29.99f, true, Categoria.Libros, ".\\Img\\amazon-logo.png"),
-                new Producto(4, "Sartén", "Sartén antiadherente", 39.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(5, "Zapatos", "Zapatos elegantes", 69.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(6, "Teclado", "Teclado mecánico para gamers", 89.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(7, "Taza", "Taza con diseño divertido", 9.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(8, "Mochila", "Mochila resistente al agua", 49.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(9, "Monitor", "Monitor de alta resolución", 299.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(10, "Cocina eléctrica", "Cocina eléctrica multifunción", 129.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(11, "Reloj", "Reloj de pulsera elegante", 149.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(12, "Altavoces", "Altavoces Bluetooth de alta calidad", 79.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(13, "Cojines", "Cojines decorativos para el hogar", 14.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(14, "Gafas de sol", "Gafas de sol modernas", 59.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png")
-            };
+                var response = client.GetAsync("http://localhost:3000/productos").Result;
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                    
+
+                    foreach (Producto p in productos) listaProductos.Add(p);
+                }
+                else
+                {
+                    throw new Exception("Error al cargar la información de la API.");
+                }
+            }
+            return listaProductos;
+        }
+
+        private void VaciarProductos()
+        {
+            Grid productosGrid = (Grid)FindName("productosGrid");
+            productosGrid.Children.Clear();
         }
 
         private void MostrarProductos(List<Producto> productos)
@@ -183,6 +194,51 @@ namespace AmazonChiquito
             bordeProducto.MouseLeave += OnMouseLeave;
 
             return bordeProducto;
+        }
+
+        //FUNCIÓN BUSCADOR
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<Producto> filtroProductos = new List<Producto>();
+            using (HttpClient client = new HttpClient())
+            {
+                var ruta = new Uri("http://localhost:3000/buscador");
+                var buscador = new Buscador()
+                {
+                    texto = searchBox.Text
+                };
+                var buscadorJSON = JsonConvert.SerializeObject(buscador);
+                var contenido = new StringContent(buscadorJSON, Encoding.UTF8, "application/json");
+                var resultado = client.PostAsync(ruta, contenido).Result.Content.ReadAsStringAsync().Result;
+                var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                foreach (Producto p in productos) filtroProductos.Add(p);
+            }
+            VaciarProductos();
+            MostrarProductos(filtroProductos);
+        }
+
+        //FUNCIÓN FAVORITOS
+        private void Favoritos_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            List<Producto> productosFavoritos = new List<Producto>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = client.GetAsync("http://localhost:3000/favoritos").Result;
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                    foreach (Producto p in productos) productosFavoritos.Add(p);
+                }
+                else
+                {
+                    throw new Exception("Error al cargar la información de la API.");
+                }
+            }
+            VaciarProductos();
+            MostrarProductos(productosFavoritos);
         }
     }
 }

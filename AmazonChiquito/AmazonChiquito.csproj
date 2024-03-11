@@ -88,6 +88,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Buscador.cs" />
+    <Compile Include="Categoria.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -121,9 +123,26 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Img\laptop.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\amazon-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\altavoces.png" />
+    <Resource Include="Img\camiseta.png" />
+    <Resource Include="Img\cocina.png" />
+    <Resource Include="Img\cojines.png" />
+    <Resource Include="Img\gafas.png" />
+    <Resource Include="Img\libro.png" />
+    <Resource Include="Img\mochila.png" />
+    <Resource Include="Img\monitor.png" />
+    <Resource Include="Img\reloj.png" />
+    <Resource Include="Img\sarten.png" />
+    <Resource Include="Img\taza.png" />
+    <Resource Include="Img\teclado.png" />
+    <Resource Include="Img\zapatos.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
