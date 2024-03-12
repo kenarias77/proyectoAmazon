@@ -28,7 +28,8 @@
             </Grid>
 
             <!-- Botón de Búsqueda -->
-            <Button x:Name="searchButton" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Orange" Width="34" Height="30" Margin="796,0,0,6">
+            <Button x:Name="searchButton" VerticalAlignment="Center" HorizontalAlignment="Left" Background="Orange" Width="34" Height="30" Margin="796,0,0,6"
+                    Click="searchButton_Click">
                 <TextBlock Text="🔍" FontSize="20" Foreground="White"/>
             </Button>
 
@@ -62,11 +63,12 @@
         <Grid x:Name="bottomBar" Background="DeepSkyBlue" Height="50" VerticalAlignment="Top" Margin="0,50,0,0">
             <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                 <TextBlock Text="☰ Todo" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,10,0"/>
-                <TextBlock Text="Informática" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,10,0" MouseLeftButtonUp="onCategory"/>
-                <TextBlock Text="Hogar y cocina" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
-                <TextBlock Text="Libros" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
-                <TextBlock Text="Moda" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
-                <TextBlock Text="Favoritos" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
+                <TextBlock Text="Informática" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,10,0" Tag="Informatica" MouseLeftButtonDown="onCategoria"/>
+                <TextBlock Text="Hogar y cocina" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" Tag="HogarYCocina" MouseLeftButtonDown="onCategoria"/>
+                <TextBlock Text="Libros" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" Tag="Libros" MouseLeftButtonDown="onCategoria"/>
+                <TextBlock Text="Moda" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" Tag="Moda" MouseLeftButtonDown="onCategoria"/>
+                <TextBlock Text="Favoritos" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="onFavoritos"/>
+                <TextBlock Text="Recomendados" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="onRecomendados"/>
             </StackPanel>
         </Grid>
 
@@ -83,7 +85,6 @@
                         <ColumnDefinition Width="250"/>
                         <!-- Columna 4 con ancho de 200px -->
                     </Grid.ColumnDefinitions>
-
                     <!-- Aquí se agregarán dinámicamente los productos -->
                 </Grid>
             </ScrollViewer>

@@ -1,18 +1,11 @@
-﻿using System;
+﻿using AmazonChiquito;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-// Enum para las categorías posibles
-public enum Categoria
-{
-    Informatica,
-    Moda,
-    HogarYCocina,
-    Libros
-}
-
+[Serializable]
 public class Producto
 {
     private int id;

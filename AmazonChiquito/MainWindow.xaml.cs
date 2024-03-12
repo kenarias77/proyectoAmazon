@@ -27,15 +27,18 @@ namespace AmazonChiquito
         private TextBox usernameBox;
         private PasswordBox passwordBox;
         private TextBlock textBlock;
+        private TextBlock categoryTextBlock;
+        private TextBlock categoryTextBlock2;
+        private Image imagenCategoria;
 
         public MainWindow()
         {
             InitializeComponent();
 
             // Lista con los productos recibidos de la API
-            productosDesdeAPI = ObtenerProductosDesdeAPI();
-
             usuarios = ObtenerUsuariosDesdeAPI();
+
+            productosDesdeAPI = ObtenerProductosDesdeAPI();
 
             foreach (Usuario u in usuarios)
             {
@@ -69,26 +72,32 @@ namespace AmazonChiquito
             return usuarios;
         }
 
-        // Función de ejemplo para obtener productos (simulada)
+        // Función de ejemplo para obtener productos
         private List<Producto> ObtenerProductosDesdeAPI()
         {
-            return new List<Producto>
+            List<Producto> listaProductos = new List<Producto>();
+
+            using (HttpClient client = new HttpClient())
             {
-                new Producto(1, "Laptop", "Potente computadora portátil", 1999.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(2, "Camiseta", "Camiseta de algodón de alta calidad", 19.99f, false, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(3, "Libro", "Bestseller del año", 29.99f, true, Categoria.Libros, ".\\Img\\amazon-logo.png"),
-                new Producto(4, "Sartén", "Sartén antiadherente", 39.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(5, "Zapatos", "Zapatos elegantes", 69.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(6, "Teclado", "Teclado mecánico para gamers", 89.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(7, "Taza", "Taza con diseño divertido", 9.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(8, "Mochila", "Mochila resistente al agua", 49.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(9, "Monitor", "Monitor de alta resolución", 299.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(10, "Cocina eléctrica", "Cocina eléctrica multifunción", 129.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(11, "Reloj", "Reloj de pulsera elegante", 149.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
-                new Producto(12, "Altavoces", "Altavoces Bluetooth de alta calidad", 79.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
-                new Producto(13, "Cojines", "Cojines decorativos para el hogar", 14.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
-                new Producto(14, "Gafas de sol", "Gafas de sol modernas", 59.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png")
-            };
+                var response = client.GetAsync("http://localhost:3000/productos").Result;
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    listaProductos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                }
+                else
+                {
+                    throw new Exception("Error al cargar la información de la API.");
+                }
+            }
+            return listaProductos;
+        }
+
+        private void VaciarProductos()
+        {
+            Grid productosGrid = (Grid)FindName("productosGrid");
+            productosGrid.Children.Clear();
         }
 
         private void MostrarProductos(List<Producto> productos)
@@ -133,6 +142,27 @@ namespace AmazonChiquito
 
         private void onHolaIdentificate(object sender, MouseEventArgs e)
         {
+            VaciarProductos();
+
+            if (categoryTextBlock != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock);
+                categoryTextBlock = null;
+            }
+
+            if (categoryTextBlock2 != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock2);
+                categoryTextBlock2 = null;
+            }
+
+            if (imagenCategoria != null)
+            {
+                mainGrid.Children.Remove(imagenCategoria);
+                imagenCategoria = null;
+            }
+
+
             // Acceder al Grid
             Grid productosGrid = (Grid)FindName("productosGrid");
             productosGrid.Children.Clear();
@@ -237,67 +267,29 @@ namespace AmazonChiquito
 
         private void onLogoClick(object sender, RoutedEventArgs e)
         {
+            if (categoryTextBlock != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock);
+                categoryTextBlock = null;
+                Grid productosGrid = (Grid)FindName("productosGrid");
+                productosGrid.Margin = new Thickness(0, 10, 0, 0);
+            }
+
+            if (categoryTextBlock2 != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock2);
+                categoryTextBlock2 = null;
+            }
+
+            if (imagenCategoria != null)
+            {
+                mainGrid.Children.Remove(imagenCategoria);
+                imagenCategoria = null;
+            }
+            VaciarProductos();
             MostrarProductos(productosDesdeAPI);
         }
 
-        private void onCategory(object sender, RoutedEventArgs e)
-        {
-            Grid productosGrid = (Grid)FindName("productosGrid");
-            productosGrid.Margin = new Thickness(0, 90, 0, 0);
-
-            // Crear el TextBlock
-            TextBlock categoryTextBlock = new TextBlock();
-            categoryTextBlock.Text = "Sección de informática";
-            categoryTextBlock.Foreground = Brushes.White;
-            categoryTextBlock.Background = Brushes.DodgerBlue;
-            categoryTextBlock.VerticalAlignment = VerticalAlignment.Top;
-            categoryTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
-            categoryTextBlock.TextAlignment = TextAlignment.Center;
-            categoryTextBlock.Margin = new Thickness(0, 0, 0, 0);
-            categoryTextBlock.Height = 80;
-            categoryTextBlock.Width = 1060;
-            categoryTextBlock.MouseLeftButtonUp += onCloseCategory;
-            categoryTextBlock.FontSize = 44; // Tamaño de fuente 24
-            categoryTextBlock.FontWeight = FontWeights.Bold; // Texto en negrita
-
-
-            // Agregar el TextBlock al Grid
-            Grid.SetColumn(categoryTextBlock, 0);
-            Grid.SetColumnSpan(categoryTextBlock, 4);
-            Grid.SetRow(categoryTextBlock, 0);
-            mainGrid.Children.Add(categoryTextBlock);
-
-            // Crear el TextBlock
-            TextBlock categoryTextBlock2 = new TextBlock();
-            categoryTextBlock2.Foreground = Brushes.White;
-            categoryTextBlock2.Background = Brushes.DodgerBlue;
-            categoryTextBlock2.VerticalAlignment = VerticalAlignment.Top;
-            categoryTextBlock2.HorizontalAlignment = HorizontalAlignment.Left;
-            categoryTextBlock2.TextAlignment = TextAlignment.Center;
-            categoryTextBlock2.Margin = new Thickness(0, 0, 0, 0);
-            categoryTextBlock2.Height = 700;
-            categoryTextBlock2.Width = 226;
-            categoryTextBlock2.MouseLeftButtonUp += onCloseCategory;
-            categoryTextBlock2.FontSize = 44; // Tamaño de fuente 24
-            categoryTextBlock2.FontWeight = FontWeights.Bold; // Texto en negrita
-
-            Image imagenCategoria = new Image();
-            imagenCategoria.Source = new BitmapImage(new Uri("/Img/informatica.png", UriKind.RelativeOrAbsolute));
-            imagenCategoria.Width = 160;
-            imagenCategoria.Height = 160;
-            imagenCategoria.Margin = new Thickness(30, 30, 0, 0);
-            imagenCategoria.HorizontalAlignment = HorizontalAlignment.Left;
-            imagenCategoria.VerticalAlignment = VerticalAlignment.Top;
-
-            Grid.SetColumn(imagenCategoria, 0);
-            // Agregar el TextBlock al Grid
-            Grid.SetColumn(categoryTextBlock2, 1);
-            Grid.SetRowSpan(categoryTextBlock2, 4);
-            Grid.SetRow(categoryTextBlock2, 1);
-            mainGrid.Children.Add(categoryTextBlock2);
-            mainGrid.Children.Add(imagenCategoria);
-
-        }
 
         private void onCloseCategory(object sender, MouseButtonEventArgs e)
         {
@@ -341,7 +333,7 @@ namespace AmazonChiquito
         {
             if (sender is Border border)
             {
-                CambiarColorFondo(border, Colors.LightGray);
+                CambiarColorFondo(border, Colors.LightBlue);
             }
         }
 
@@ -350,7 +342,7 @@ namespace AmazonChiquito
         {
             if (sender is Border border)
             {
-                CambiarColorFondo(border, (Color)ColorConverter.ConvertFromString("#F5F5F5"));
+                CambiarColorFondo(border, Colors.DodgerBlue);
             }
         }
 
@@ -376,9 +368,9 @@ namespace AmazonChiquito
         {
             Image imagenProducto = new Image();
             imagenProducto.Source = new BitmapImage(new Uri(producto.Imagen, UriKind.RelativeOrAbsolute));
-            imagenProducto.Width = 200;
+            imagenProducto.Width = 150;
             imagenProducto.Height = 200;
-            imagenProducto.Margin = new Thickness(10, 0, 0, 56);
+            imagenProducto.Margin = new Thickness(25, 0, 0, 65);
             imagenProducto.HorizontalAlignment = HorizontalAlignment.Left;
 
             return imagenProducto;
@@ -425,7 +417,221 @@ namespace AmazonChiquito
             bordeProducto.MouseEnter += OnMouseEnter;
             bordeProducto.MouseLeave += OnMouseLeave;
 
+            bordeProducto.Background = Brushes.DodgerBlue;
+
             return bordeProducto;
+        }
+
+        //FUNCIÓN BUSCADOR
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<Producto> filtroProductos = new List<Producto>();
+            using (HttpClient client = new HttpClient())
+            {
+                var ruta = new Uri("http://localhost:3000/buscador");
+                var buscador = new Buscador()
+                {
+                    texto = searchBox.Text
+                };
+                var buscadorJSON = JsonConvert.SerializeObject(buscador);
+                var contenido = new StringContent(buscadorJSON, Encoding.UTF8, "application/json");
+                var resultado = client.PostAsync(ruta, contenido).Result.Content.ReadAsStringAsync().Result;
+                filtroProductos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+            }
+            VaciarProductos();
+            MostrarProductos(filtroProductos);
+        }
+
+        //FUNCIÓN FAVORITOS
+        private void onFavoritos(object sender, MouseButtonEventArgs e)
+        {
+            List<Producto> productosFavoritos = new List<Producto>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = client.GetAsync("http://localhost:3000/favoritos").Result;
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    productosFavoritos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                }
+                else
+                {
+                    throw new Exception("Error al cargar la información de la API.");
+                }
+            }
+            VaciarProductos();
+            MostrarProductos(productosFavoritos);
+        }
+
+        //FUNCIÓN RECOMENDADOS
+        private void onRecomendados(object sender, MouseButtonEventArgs e)
+        {
+            List<Producto> productosRecomendados = new List<Producto>();
+
+            if (categoryTextBlock != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock);
+                categoryTextBlock = null;
+                Grid productosGrid = (Grid)FindName("productosGrid");
+                productosGrid.Margin = new Thickness(0, 15, 0, 0);
+
+            }
+
+            if (categoryTextBlock2 != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock2);
+                categoryTextBlock2 = null;
+            }
+
+            if (imagenCategoria != null)
+            {
+                mainGrid.Children.Remove(imagenCategoria);
+                imagenCategoria = null;
+            }
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = client.GetAsync("http://localhost:3000/recomendados").Result;
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    List<Producto> productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                    Random random = new Random();
+                    var length = productos.Count;
+                    for (int i = 0; i < length; i++)
+                    {
+                        int randomNumber = random.Next(productos.Count);
+                        productosRecomendados.Add(productos[randomNumber]);
+                        productos.RemoveAt(randomNumber);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error al cargar la información de la API.");
+                }
+            }
+            VaciarProductos();
+            MostrarProductos(productosRecomendados);
+        }
+
+        //FUNNCIÓN QUE UTILIZAN LAS 4 CATEGORÍAS PARA FILTRAR SUS PRODUCTOS
+        private void onCategoria(object sender, MouseButtonEventArgs e)
+        {
+            if (categoryTextBlock != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock);
+                categoryTextBlock = null;
+            }
+
+            if (categoryTextBlock2 != null)
+            {
+                mainGrid.Children.Remove(categoryTextBlock2);
+                categoryTextBlock2 = null;
+            }
+
+            if (imagenCategoria != null)
+            {
+                mainGrid.Children.Remove(imagenCategoria);
+                imagenCategoria = null;
+            }
+            TextBlock textBlock = sender as TextBlock;
+
+            if (textBlock != null)
+            {
+                string parametro = textBlock.Tag as string;
+
+                List<Producto> filtroProductos = new List<Producto>();
+                using (HttpClient client = new HttpClient())
+                {
+                    var ruta = new Uri("http://localhost:3000/filtrador");
+                    var filtrador = new Filtrador()
+                    {
+                        filtro = parametro
+                    };
+                    var filtradorJSON = JsonConvert.SerializeObject(filtrador);
+                    var contenido = new StringContent(filtradorJSON, Encoding.UTF8, "application/json");
+                    var resultado = client.PostAsync(ruta, contenido).Result.Content.ReadAsStringAsync().Result;
+                    filtroProductos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                }
+                VaciarProductos();
+                MostrarProductos(filtroProductos);
+            }
+            
+            Grid productosGrid = (Grid)FindName("productosGrid");
+            productosGrid.Margin = new Thickness(0, 90, 0, 0);
+
+            // Crear el TextBlock
+            categoryTextBlock = new TextBlock();
+            categoryTextBlock.Text = "Sección de "+textBlock.Tag;
+            categoryTextBlock.Foreground = Brushes.White;
+            categoryTextBlock.Background = Brushes.DodgerBlue;
+            categoryTextBlock.VerticalAlignment = VerticalAlignment.Top;
+            categoryTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
+            categoryTextBlock.TextAlignment = TextAlignment.Center;
+            categoryTextBlock.Margin = new Thickness(0, 0, 0, 0);
+            categoryTextBlock.Height = 80;
+            categoryTextBlock.Width = 1060;
+            categoryTextBlock.MouseLeftButtonUp += onCloseCategory;
+            categoryTextBlock.FontSize = 44; // Tamaño de fuente 24
+            categoryTextBlock.FontWeight = FontWeights.Bold; // Texto en negrita
+
+
+            // Agregar el TextBlock al Grid
+            Grid.SetColumn(categoryTextBlock, 0);
+            Grid.SetColumnSpan(categoryTextBlock, 4);
+            Grid.SetRow(categoryTextBlock, 0);
+            mainGrid.Children.Add(categoryTextBlock);
+
+            // Crear el TextBlock
+            categoryTextBlock2 = new TextBlock();
+            categoryTextBlock2.Foreground = Brushes.White;
+            categoryTextBlock2.Background = Brushes.DodgerBlue;
+            categoryTextBlock2.VerticalAlignment = VerticalAlignment.Top;
+            categoryTextBlock2.HorizontalAlignment = HorizontalAlignment.Left;
+            categoryTextBlock2.TextAlignment = TextAlignment.Center;
+            categoryTextBlock2.Margin = new Thickness(0, 0, 0, 0);
+            categoryTextBlock2.Height = 700;
+            categoryTextBlock2.Width = 226;
+            categoryTextBlock2.MouseLeftButtonUp += onCloseCategory;
+            categoryTextBlock2.FontSize = 44; // Tamaño de fuente 24
+            categoryTextBlock2.FontWeight = FontWeights.Bold; // Texto en negrita
+
+            imagenCategoria = new Image();
+            String imagenString = "";
+            Console.WriteLine(textBlock.Tag);
+            if (textBlock.Tag.ToString() == "Informatica")
+            {
+                imagenString = "/Img/informatica.png";
+            }
+            else if (textBlock.Tag.ToString() == "Moda")
+            {
+                imagenString = "/Img/moda.png";
+            }
+            else if (textBlock.Tag.ToString() == "HogarYCocina")
+            {
+                imagenString = "/Img/cocina.jpg";
+            }
+            else if (textBlock.Tag.ToString() == "Libros")
+            {
+                imagenString = "/Img/libro_logo.png";
+            }
+            imagenCategoria.Source = new BitmapImage(new Uri(imagenString, UriKind.RelativeOrAbsolute));
+            imagenCategoria.Width = 160;
+            imagenCategoria.Height = 160;
+            imagenCategoria.Margin = new Thickness(30, 30, 0, 0);
+            imagenCategoria.HorizontalAlignment = HorizontalAlignment.Left;
+            imagenCategoria.VerticalAlignment = VerticalAlignment.Top;
+
+            Grid.SetColumn(imagenCategoria, 0);
+            // Agregar el TextBlock al Grid
+            Grid.SetColumn(categoryTextBlock2, 1);
+            Grid.SetRowSpan(categoryTextBlock2, 4);
+            Grid.SetRow(categoryTextBlock2, 1);
+            mainGrid.Children.Add(categoryTextBlock2);
+            mainGrid.Children.Add(imagenCategoria);
         }
     }
 }
