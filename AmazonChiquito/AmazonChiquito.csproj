@@ -80,8 +80,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="favoritos.xaml.cs">
+      <DependentUpon>favoritos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Filtrador.cs" />
     <Compile Include="Usuario.cs" />
+    <Page Include="favoritos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +152,9 @@
     <Resource Include="Img\taza.png" />
     <Resource Include="Img\teclado.png" />
     <Resource Include="Img\zapatos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\estrella.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
