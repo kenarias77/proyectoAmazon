@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -45,10 +46,7 @@ namespace AmazonChiquito
                 if (response.IsSuccessStatusCode)
                 {
                     var resultado = response.Content.ReadAsStringAsync().Result;
-                    var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                    
-
-                    foreach (Producto p in productos) listaProductos.Add(p);
+                    listaProductos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
                 }
                 else
                 {
@@ -109,7 +107,7 @@ namespace AmazonChiquito
         {
             if (sender is Border border)
             {
-                CambiarColorFondo(border, Colors.LightGray);
+                CambiarColorFondo(border, Colors.LightBlue);
             }
         }
 
@@ -118,7 +116,7 @@ namespace AmazonChiquito
         {
             if (sender is Border border)
             {
-                CambiarColorFondo(border, (Color)ColorConverter.ConvertFromString("#F5F5F5"));
+                CambiarColorFondo(border, Colors.DodgerBlue);
             }
         }
 
@@ -144,9 +142,9 @@ namespace AmazonChiquito
         {
             Image imagenProducto = new Image();
             imagenProducto.Source = new BitmapImage(new Uri(producto.Imagen, UriKind.RelativeOrAbsolute));
-            imagenProducto.Width = 200;
+            imagenProducto.Width = 150;
             imagenProducto.Height = 200;
-            imagenProducto.Margin = new Thickness(10, 0, 0, 56);
+            imagenProducto.Margin = new Thickness(25, 0, 0, 65);
             imagenProducto.HorizontalAlignment = HorizontalAlignment.Left;
 
             return imagenProducto;
@@ -192,6 +190,7 @@ namespace AmazonChiquito
             // Asigna eventos MouseEnter y MouseLeave al producto
             bordeProducto.MouseEnter += OnMouseEnter;
             bordeProducto.MouseLeave += OnMouseLeave;
+            bordeProducto.Background = Brushes.DodgerBlue;
 
             return bordeProducto;
         }
@@ -210,8 +209,7 @@ namespace AmazonChiquito
                 var buscadorJSON = JsonConvert.SerializeObject(buscador);
                 var contenido = new StringContent(buscadorJSON, Encoding.UTF8, "application/json");
                 var resultado = client.PostAsync(ruta, contenido).Result.Content.ReadAsStringAsync().Result;
-                var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                foreach (Producto p in productos) filtroProductos.Add(p);
+                filtroProductos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
             }
             VaciarProductos();
             MostrarProductos(filtroProductos);
@@ -229,8 +227,7 @@ namespace AmazonChiquito
                 if (response.IsSuccessStatusCode)
                 {
                     var resultado = response.Content.ReadAsStringAsync().Result;
-                    var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                    foreach (Producto p in productos) productosFavoritos.Add(p);
+                    productosFavoritos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
                 }
                 else
                 {
@@ -239,6 +236,64 @@ namespace AmazonChiquito
             }
             VaciarProductos();
             MostrarProductos(productosFavoritos);
+        }
+
+        //FUNCIÓN RECOMENDADOS
+        private void Recomendados_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            List<Producto> productosRecomendados = new List<Producto>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = client.GetAsync("http://localhost:3000/recomendados").Result;
+                response.EnsureSuccessStatusCode();
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    List<Producto> productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                    Random random = new Random();
+                    var length = productos.Count;
+                    for (int i=0; i < length; i++)
+                    {
+                        int randomNumber = random.Next(productos.Count);
+                        productosRecomendados.Add(productos[randomNumber]);
+                        productos.RemoveAt(randomNumber);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Error al cargar la información de la API.");
+                }
+            }
+            VaciarProductos();
+            MostrarProductos(productosRecomendados);
+        }
+
+        //FUNNCIÓN QUE UTILIZAN LAS 4 CATEGORÍAS PARA FILTRAR SUS PRODUCTOS
+        private void Filtrador_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+
+            if (textBlock != null)
+            {
+                string parametro = textBlock.Tag as string;
+
+                List<Producto> filtroProductos = new List<Producto>();
+                using (HttpClient client = new HttpClient())
+                {
+                    var ruta = new Uri("http://localhost:3000/filtrador");
+                    var filtrador = new Filtrador()
+                    {
+                        filtro = parametro
+                    };
+                    var filtradorJSON = JsonConvert.SerializeObject(filtrador);
+                    var contenido = new StringContent(filtradorJSON, Encoding.UTF8, "application/json");
+                    var resultado = client.PostAsync(ruta, contenido).Result.Content.ReadAsStringAsync().Result;
+                    filtroProductos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
+                }
+                VaciarProductos();
+                MostrarProductos(filtroProductos);
+            }
         }
     }
 }

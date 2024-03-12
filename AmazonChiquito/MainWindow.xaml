@@ -58,12 +58,12 @@
         <Grid x:Name="bottomBar" Background="DeepSkyBlue" Height="50" VerticalAlignment="Top" Margin="0,50,0,0">
             <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                 <TextBlock Text="☰ Todo" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,10,0"/>
-                <TextBlock Text="Informática" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,10,0"/>
-                <TextBlock Text="Hogar y cocina" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
-                <TextBlock Text="Libros" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
-                <TextBlock Text="Moda" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
+                <TextBlock Text="Informática" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,10,0" MouseLeftButtonDown="Filtrador_MouseLeftButtonDown" Tag="Informatica"/>
+                <TextBlock Text="Hogar y cocina" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="Filtrador_MouseLeftButtonDown" Tag="HogarYCocina"/>
+                <TextBlock Text="Libros" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="Filtrador_MouseLeftButtonDown" Tag="Libros"/>
+                <TextBlock Text="Moda" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="Filtrador_MouseLeftButtonDown" Tag="Moda"/>
                 <TextBlock Text="Favoritos" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="Favoritos_MouseLeftButtonDown"/>
-                <TextBlock Text="Recomendados" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0"/>
+                <TextBlock Text="Recomendados" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,10,0" MouseLeftButtonDown="Recomendados_MouseLeftButtonDown"/>
             </StackPanel>
         </Grid>
 
