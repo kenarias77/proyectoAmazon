@@ -445,24 +445,9 @@ namespace AmazonChiquito
         //FUNCIÓN FAVORITOS
         private void onFavoritos(object sender, MouseButtonEventArgs e)
         {
-            List<Producto> productosFavoritos = new List<Producto>();
-
-            using (HttpClient client = new HttpClient())
-            {
-                var response = client.GetAsync("http://localhost:3000/favoritos").Result;
-                response.EnsureSuccessStatusCode();
-                if (response.IsSuccessStatusCode)
-                {
-                    var resultado = response.Content.ReadAsStringAsync().Result;
-                    productosFavoritos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                }
-                else
-                {
-                    throw new Exception("Error al cargar la información de la API.");
-                }
-            }
-            VaciarProductos();
-            MostrarProductos(productosFavoritos);
+            Favoritos fav = new Favoritos();
+            fav.Show();
+            Close();
         }
 
         //FUNCIÓN RECOMENDADOS

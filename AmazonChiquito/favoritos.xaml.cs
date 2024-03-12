@@ -19,9 +19,9 @@ namespace AmazonChiquito
     /// <summary>
     /// Lógica de interacción para favoritos.xaml
     /// </summary>
-    public partial class favoritos : Window
+    public partial class Favoritos : Window
     {
-        public favoritos()
+        public Favoritos()
         {
             InitializeComponent();
             List<Producto> productosFavoritos = ObtenerFavoritos();

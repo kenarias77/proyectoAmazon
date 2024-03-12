@@ -82,8 +82,15 @@
     </ApplicationDefinition>
     <Compile Include="Buscador.cs" />
     <Compile Include="Categoria.cs" />
+    <Compile Include="Favoritos.xaml.cs">
+      <DependentUpon>Favoritos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Filtrador.cs" />
     <Compile Include="Usuario.cs" />
+    <Page Include="Favoritos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -158,6 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\libro_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\estrella.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
