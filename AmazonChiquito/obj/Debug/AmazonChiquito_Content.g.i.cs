@@ -8,18 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/altavoces.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/camiseta.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/cocina.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/cojines.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/gafas.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/libro.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/mochila.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/monitor.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/reloj.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/sarten.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/taza.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/teclado.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/zapatos.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("img/libro_logo.png")]
 
 
