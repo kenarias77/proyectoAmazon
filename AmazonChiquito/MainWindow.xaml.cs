@@ -22,46 +22,73 @@ namespace AmazonChiquito
     /// </summary>
     public partial class MainWindow : Window
     {
+        public List<Usuario> usuarios;
+        public List<Producto> productosDesdeAPI;
+        private TextBox usernameBox;
+        private PasswordBox passwordBox;
+        private TextBlock textBlock;
+
         public MainWindow()
         {
             InitializeComponent();
 
             // Lista con los productos recibidos de la API
-            List<Producto> productosDesdeAPI = ObtenerProductosDesdeAPI();
+            productosDesdeAPI = ObtenerProductosDesdeAPI();
+
+            usuarios = ObtenerUsuariosDesdeAPI();
+
+            foreach (Usuario u in usuarios)
+            {
+                System.Diagnostics.Debug.WriteLine("Nombre: "+u.Username);
+            }
 
             // Muestra los productos en la vista
             MostrarProductos(productosDesdeAPI);
         }
 
-        // Función de ejemplo para obtener productos (simulada)
-        private List<Producto> ObtenerProductosDesdeAPI()
+        private List<Usuario> ObtenerUsuariosDesdeAPI()
         {
-            List<Producto> listaProductos = new List<Producto>();
+            List<Usuario> usuarios = new List<Usuario>();
 
             using (HttpClient client = new HttpClient())
             {
-                var response = client.GetAsync("http://localhost:3000/productos").Result;
+                var response = client.GetAsync("http://localhost:3000/usuarios").Result;
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
                     var resultado = response.Content.ReadAsStringAsync().Result;
-                    var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                    
-
-                    foreach (Producto p in productos) listaProductos.Add(p);
+                    var u = JsonConvert.DeserializeObject<List<Usuario>>(resultado);
+                    foreach (Usuario p in u) usuarios.Add(p);
                 }
                 else
                 {
                     throw new Exception("Error al cargar la información de la API.");
                 }
             }
-            return listaProductos;
+
+            return usuarios;
         }
 
-        private void VaciarProductos()
+        // Función de ejemplo para obtener productos (simulada)
+        private List<Producto> ObtenerProductosDesdeAPI()
         {
-            Grid productosGrid = (Grid)FindName("productosGrid");
-            productosGrid.Children.Clear();
+            return new List<Producto>
+            {
+                new Producto(1, "Laptop", "Potente computadora portátil", 1999.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
+                new Producto(2, "Camiseta", "Camiseta de algodón de alta calidad", 19.99f, false, Categoria.Moda, ".\\Img\\amazon-logo.png"),
+                new Producto(3, "Libro", "Bestseller del año", 29.99f, true, Categoria.Libros, ".\\Img\\amazon-logo.png"),
+                new Producto(4, "Sartén", "Sartén antiadherente", 39.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
+                new Producto(5, "Zapatos", "Zapatos elegantes", 69.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
+                new Producto(6, "Teclado", "Teclado mecánico para gamers", 89.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
+                new Producto(7, "Taza", "Taza con diseño divertido", 9.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
+                new Producto(8, "Mochila", "Mochila resistente al agua", 49.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
+                new Producto(9, "Monitor", "Monitor de alta resolución", 299.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
+                new Producto(10, "Cocina eléctrica", "Cocina eléctrica multifunción", 129.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
+                new Producto(11, "Reloj", "Reloj de pulsera elegante", 149.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png"),
+                new Producto(12, "Altavoces", "Altavoces Bluetooth de alta calidad", 79.99f, true, Categoria.Informatica, ".\\Img\\amazon-logo.png"),
+                new Producto(13, "Cojines", "Cojines decorativos para el hogar", 14.99f, false, Categoria.HogarYCocina, ".\\Img\\amazon-logo.png"),
+                new Producto(14, "Gafas de sol", "Gafas de sol modernas", 59.99f, true, Categoria.Moda, ".\\Img\\amazon-logo.png")
+            };
         }
 
         private void MostrarProductos(List<Producto> productos)
@@ -101,6 +128,211 @@ namespace AmazonChiquito
                 // Establece la posición del producto en el Grid
                 Grid.SetColumn(bordeProducto, columna);
                 Grid.SetRow(bordeProducto, fila);
+            }
+        }
+
+        private void onHolaIdentificate(object sender, MouseEventArgs e)
+        {
+            // Acceder al Grid
+            Grid productosGrid = (Grid)FindName("productosGrid");
+            productosGrid.Children.Clear();
+
+
+            productosGrid.VerticalAlignment = VerticalAlignment.Center;
+            productosGrid.HorizontalAlignment = HorizontalAlignment.Center;
+
+            // Crear el elemento Border
+            Border newBorder = new Border();
+            newBorder.BorderBrush = Brushes.DarkGray;
+            newBorder.BorderThickness = new Thickness(2);
+            newBorder.CornerRadius = new CornerRadius(5);
+            newBorder.Padding = new Thickness(20);
+            newBorder.Height = 256;
+            newBorder.Margin = new Thickness(0, 0, 0, 0);
+
+            // Crear el Grid dentro del Border
+            Grid newGrid = new Grid();
+
+            // Definir las filas del nuevo Grid
+            newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            newGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto }); // Nueva fila para el botón
+
+            // TextBlock "Inicio de Sesión"
+            textBlock = new TextBlock();
+            textBlock.Name = "textBlock";
+            textBlock.Text = "Inicio de Sesión";
+            textBlock.FontSize = 20;
+            textBlock.FontWeight = FontWeights.Bold;
+            textBlock.Margin = new Thickness(0, 0, 0, 20);
+            textBlock.HorizontalAlignment = HorizontalAlignment.Center;
+            textBlock.TextWrapping = TextWrapping.NoWrap;
+            textBlock.Height = 20;
+            Grid.SetRow(textBlock, 0);
+
+            // Etiqueta y TextBox para el nombre de usuario
+            TextBlock usuarioLabel = new TextBlock();
+            usuarioLabel.Text = "Nombre de Usuario:";
+            usuarioLabel.Width = 150;
+            usuarioLabel.Height = 60;
+            Grid.SetRow(usuarioLabel, 1);
+
+            usernameBox = new TextBox();
+            usernameBox.Name = "usernameBox";
+            usernameBox.Width = 151;
+            usernameBox.Height = 20;
+            Grid.SetRow(usernameBox, 1);
+
+            // Etiqueta y PasswordBox para la contraseña
+            TextBlock passwordLabel = new TextBlock();
+            passwordLabel.Text = "Contraseña:";
+            passwordLabel.Width = 149;
+            passwordLabel.Height = 60;
+            Grid.SetRow(passwordLabel, 2);
+
+            passwordBox = new PasswordBox();
+            passwordBox.Name = "passwordBox";
+            passwordBox.Width = 152;
+            passwordBox.Height = 20;
+            Grid.SetRow(passwordBox, 2);
+
+            // CheckBox para aceptar condiciones
+            CheckBox checkBox = new CheckBox();
+            checkBox.Content = "Acepto las condiciones";
+            checkBox.Margin = new Thickness(0, 0, 0, 10);
+            checkBox.HorizontalAlignment = HorizontalAlignment.Center;
+            checkBox.Height = 15;
+            Grid.SetRow(checkBox, 4);
+
+            // Botón de Iniciar Sesión
+            Button button = new Button();
+            button.Content = "Iniciar Sesión";
+            button.Width = 147;
+            button.Height = 20;
+            button.HorizontalAlignment = HorizontalAlignment.Center;
+            button.Background = Brushes.DodgerBlue;
+            button.Foreground = Brushes.White;
+            button.Click += login;
+            Grid.SetRow(button, 5);
+
+            // Agregar elementos al nuevo Grid
+            newGrid.Children.Add(textBlock);
+            newGrid.Children.Add(usuarioLabel);
+            newGrid.Children.Add(usernameBox);
+            newGrid.Children.Add(passwordLabel);
+            newGrid.Children.Add(passwordBox);
+            newGrid.Children.Add(checkBox);
+            newGrid.Children.Add(button);
+
+            // Agregar el nuevo Grid al Border
+            newBorder.Child = newGrid;
+
+            // Agregar el Border al Grid productosGrid
+            Grid.SetColumn(newBorder, 1);
+            productosGrid.Children.Add(newBorder);
+        }
+
+        private void onLogoClick(object sender, RoutedEventArgs e)
+        {
+            MostrarProductos(productosDesdeAPI);
+        }
+
+        private void onCategory(object sender, RoutedEventArgs e)
+        {
+            Grid productosGrid = (Grid)FindName("productosGrid");
+            productosGrid.Margin = new Thickness(0, 90, 0, 0);
+
+            // Crear el TextBlock
+            TextBlock categoryTextBlock = new TextBlock();
+            categoryTextBlock.Text = "Sección de informática";
+            categoryTextBlock.Foreground = Brushes.White;
+            categoryTextBlock.Background = Brushes.DodgerBlue;
+            categoryTextBlock.VerticalAlignment = VerticalAlignment.Top;
+            categoryTextBlock.HorizontalAlignment = HorizontalAlignment.Right;
+            categoryTextBlock.TextAlignment = TextAlignment.Center;
+            categoryTextBlock.Margin = new Thickness(0, 0, 0, 0);
+            categoryTextBlock.Height = 80;
+            categoryTextBlock.Width = 1060;
+            categoryTextBlock.MouseLeftButtonUp += onCloseCategory;
+            categoryTextBlock.FontSize = 44; // Tamaño de fuente 24
+            categoryTextBlock.FontWeight = FontWeights.Bold; // Texto en negrita
+
+
+            // Agregar el TextBlock al Grid
+            Grid.SetColumn(categoryTextBlock, 0);
+            Grid.SetColumnSpan(categoryTextBlock, 4);
+            Grid.SetRow(categoryTextBlock, 0);
+            mainGrid.Children.Add(categoryTextBlock);
+
+            // Crear el TextBlock
+            TextBlock categoryTextBlock2 = new TextBlock();
+            categoryTextBlock2.Foreground = Brushes.White;
+            categoryTextBlock2.Background = Brushes.DodgerBlue;
+            categoryTextBlock2.VerticalAlignment = VerticalAlignment.Top;
+            categoryTextBlock2.HorizontalAlignment = HorizontalAlignment.Left;
+            categoryTextBlock2.TextAlignment = TextAlignment.Center;
+            categoryTextBlock2.Margin = new Thickness(0, 0, 0, 0);
+            categoryTextBlock2.Height = 700;
+            categoryTextBlock2.Width = 226;
+            categoryTextBlock2.MouseLeftButtonUp += onCloseCategory;
+            categoryTextBlock2.FontSize = 44; // Tamaño de fuente 24
+            categoryTextBlock2.FontWeight = FontWeights.Bold; // Texto en negrita
+
+            Image imagenCategoria = new Image();
+            imagenCategoria.Source = new BitmapImage(new Uri("/Img/informatica.png", UriKind.RelativeOrAbsolute));
+            imagenCategoria.Width = 160;
+            imagenCategoria.Height = 160;
+            imagenCategoria.Margin = new Thickness(30, 30, 0, 0);
+            imagenCategoria.HorizontalAlignment = HorizontalAlignment.Left;
+            imagenCategoria.VerticalAlignment = VerticalAlignment.Top;
+
+            Grid.SetColumn(imagenCategoria, 0);
+            // Agregar el TextBlock al Grid
+            Grid.SetColumn(categoryTextBlock2, 1);
+            Grid.SetRowSpan(categoryTextBlock2, 4);
+            Grid.SetRow(categoryTextBlock2, 1);
+            mainGrid.Children.Add(categoryTextBlock2);
+            mainGrid.Children.Add(imagenCategoria);
+
+        }
+
+        private void onCloseCategory(object sender, MouseButtonEventArgs e)
+        {
+            // Remover el TextBlock al hacer clic
+            mainGrid.Children.Remove((UIElement)sender);
+        }
+
+        private void login(object sender, RoutedEventArgs e)
+
+        {
+            Console.WriteLine("Entra");
+            // Obtener el nombre de usuario y la contraseña ingresados
+            string username = usernameBox.Text;
+            string password = passwordBox.Password;
+            bool correct = false;
+
+            // Iterar sobre la lista de usuarios para verificar el inicio de sesión
+            foreach (Usuario usuario in usuarios)
+            {
+                Console.WriteLine("Input: " + username + " / usuario nick: " + usuario.Username);
+                if (usuario.Username == username && usuario.Password == password)
+                {
+                    correct = true;
+                    break;
+                }
+            }
+
+            if (!correct)
+            {
+                textBlock.Text = "Datos incorrectos";
+            } else
+            {
+                TextBlock loginText = (TextBlock)FindName("loginText");
+                loginText.Text = "Hola, "+username;
+                MostrarProductos(productosDesdeAPI);
             }
         }
 
@@ -194,51 +426,6 @@ namespace AmazonChiquito
             bordeProducto.MouseLeave += OnMouseLeave;
 
             return bordeProducto;
-        }
-
-        //FUNCIÓN BUSCADOR
-        private void searchButton_Click(object sender, RoutedEventArgs e)
-        {
-            List<Producto> filtroProductos = new List<Producto>();
-            using (HttpClient client = new HttpClient())
-            {
-                var ruta = new Uri("http://localhost:3000/buscador");
-                var buscador = new Buscador()
-                {
-                    texto = searchBox.Text
-                };
-                var buscadorJSON = JsonConvert.SerializeObject(buscador);
-                var contenido = new StringContent(buscadorJSON, Encoding.UTF8, "application/json");
-                var resultado = client.PostAsync(ruta, contenido).Result.Content.ReadAsStringAsync().Result;
-                var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                foreach (Producto p in productos) filtroProductos.Add(p);
-            }
-            VaciarProductos();
-            MostrarProductos(filtroProductos);
-        }
-
-        //FUNCIÓN FAVORITOS
-        private void Favoritos_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            List<Producto> productosFavoritos = new List<Producto>();
-
-            using (HttpClient client = new HttpClient())
-            {
-                var response = client.GetAsync("http://localhost:3000/favoritos").Result;
-                response.EnsureSuccessStatusCode();
-                if (response.IsSuccessStatusCode)
-                {
-                    var resultado = response.Content.ReadAsStringAsync().Result;
-                    var productos = JsonConvert.DeserializeObject<List<Producto>>(resultado);
-                    foreach (Producto p in productos) productosFavoritos.Add(p);
-                }
-                else
-                {
-                    throw new Exception("Error al cargar la información de la API.");
-                }
-            }
-            VaciarProductos();
-            MostrarProductos(productosFavoritos);
         }
     }
 }
