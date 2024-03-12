@@ -80,15 +80,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="favoritos.xaml.cs">
-      <DependentUpon>favoritos.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Buscador.cs" />
+    <Compile Include="Categoria.cs" />
     <Compile Include="Filtrador.cs" />
     <Compile Include="Usuario.cs" />
-    <Page Include="favoritos.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,8 +92,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Buscador.cs" />
-    <Compile Include="Categoria.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -133,10 +126,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Img\laptop.png" />
+    <Resource Include="Img\informatica.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\amazon-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\informatica2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\altavoces.png" />
@@ -144,6 +140,7 @@
     <Resource Include="Img\cocina.png" />
     <Resource Include="Img\cojines.png" />
     <Resource Include="Img\gafas.png" />
+    <Resource Include="Img\laptop.png" />
     <Resource Include="Img\libro.png" />
     <Resource Include="Img\mochila.png" />
     <Resource Include="Img\monitor.png" />
@@ -154,7 +151,13 @@
     <Resource Include="Img\zapatos.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Img\estrella.png" />
+    <Resource Include="Img\moda.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\cocina.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\libro_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

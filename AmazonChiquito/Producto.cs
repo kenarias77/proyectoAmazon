@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-
 [Serializable]
 public class Producto
 {
@@ -27,6 +26,37 @@ public class Producto
         Favorito = favorito;
         Categoria = categoria;
         Imagen = imagen;
+    }
+
+    // Funcion para obtener todos los productos de una api
+    public static async Task<List<Producto>> ObtenerProductosDesdeAPI()
+    {
+        List<Producto> productos = new List<Producto>();
+
+        try
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync("http://localhost:3000/amazon/productos");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    productos = await response.Content.ReadAsAsync<List<Producto>>();
+                }
+                else
+                {
+                    Console.WriteLine("Error al obtener productos desde la API. Código de estado: " + response.StatusCode);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error al obtener productos desde la API: " + e.Message);
+        }
+
+        return productos;
     }
 
     // Getter y Setter para el atributo 'id'

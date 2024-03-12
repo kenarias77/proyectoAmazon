@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AmazonChiquito
 {
@@ -40,6 +36,11 @@ namespace AmazonChiquito
         {
             get { return password; }
             set { password = value; }
+        }
+
+        public override string ToString()
+        {
+            return "Nombre: "+this.Username+" / Password: "+this.Password;
         }
     }
 }
